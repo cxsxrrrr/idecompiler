@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  place-items: center;
+  place-content: center;
+}
+
+
+.chat-container {
+  margin: 50px;
+  user-select: none;
+}
+
+.input-with-button {
+  margin: 10px;
+  user-select: none;
+}
+
+.reset {
+  margin-left: 5px;
+}
