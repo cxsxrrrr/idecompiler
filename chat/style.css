@@ -1,0 +1,30 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #282a36;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.editor-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.editor {
+    width: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: #282a36;
+    border: 1px solid #44475a;
+    padding: 15px;
+    box-sizing: border-box;
+    color: white;
+    white-space: pre-line;
+
+    outline: none;
+}
