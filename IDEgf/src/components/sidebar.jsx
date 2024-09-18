@@ -1,21 +1,19 @@
-
+import './sidebar.css'
 function Sidebar() {
   
     return (
       <>
-        <div className="sidebar">
-          <div className="sidebar-header">
-            <h3>IDEgf</h3>
-          </div>
-          <div className="sidebar-content">
-            <ul>
-              <li>File</li>
-              <li>Edit</li>
-              <li>View</li>
-              <li>Help</li>
-            </ul>
-          </div>
-        </div>
+
+    <aside className="sidebar">  
+       <div className="navigation">
+      <div className="controls">
+        <div className="close" />
+        <div className="minimize" />
+        <div className="fullscreen" />
+      </div>
+      <div className="text-wrapper">Editor</div>
+    </div></aside>
+    
       </>
     )
   }

@@ -1,0 +1,80 @@
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.navigation {
+
+    border-radius: 10px 10px 0px 0px;
+    display: flex;
+    
+    gap: 16px;
+    padding: 2px 24px;
+    position: relative;
+  }
+  
+  .navigation .controls {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 7px;
+    position: relative;
+  }
+  
+  .navigation .close {
+    background-color: #f44336;
+    border-radius: 8px;
+    height: 16px;
+    position: relative;
+    width: 16px;
+  }
+
+  .navigation .close:hover {
+    background-color: #c8342a;
+    cursor: pointer;
+  }
+  
+  .navigation .minimize {
+    background-color: #ffc107;
+    border-radius: 8px;
+    height: 16px;
+    position: relative;
+    width: 16px;
+  }
+
+  .navigation .minimize:hover {
+    background-color: #c8a640;
+    cursor: pointer;
+  }
+  
+  .navigation .fullscreen {
+    background-color: #4caf50;
+    border-radius: 8px;
+    height: 16px;
+    position: relative;
+    width: 16px;
+  }
+  .navigation .fullscreen:hover {
+    background-color: #3e8f3b;
+    cursor: pointer;
+  }
+  
+  .navigation .text-wrapper {
+    color: var(--whitetransparent-80);
+    flex: 1;
+    font-family: "Roboto-Bold", Helvetica;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+  }
+  
