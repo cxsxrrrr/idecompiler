@@ -1,13 +1,15 @@
+
 .sidebar {
-    height: 100%;
-    width: 250px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.1);
-    overflow-x: hidden;
-    padding-top: 20px;
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow-x: hidden;
+  padding-top: 20px;
+  user-select: none;
 }
 
 .navigation {
@@ -18,6 +20,7 @@
     gap: 16px;
     padding: 2px 24px;
     position: relative;
+    user-select: none;
   }
   
   .navigation .controls {
@@ -32,6 +35,7 @@
     background-color: #f44336;
     border-radius: 8px;
     height: 16px;
+    user-select: none;
     position: relative;
     width: 16px;
   }
@@ -45,6 +49,7 @@
     background-color: #ffc107;
     border-radius: 8px;
     height: 16px;
+    user-select: none;
     position: relative;
     width: 16px;
   }
@@ -58,6 +63,7 @@
     background-color: #4caf50;
     border-radius: 8px;
     height: 16px;
+    user-select: none;
     position: relative;
     width: 16px;
   }
