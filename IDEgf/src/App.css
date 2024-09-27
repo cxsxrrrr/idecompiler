@@ -2,34 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .app-container {
-  display: flex;
-  height: 100vh; /* Ocupar toda la altura de la pantalla */
+  @apply flex h-screen; /* Utiliza Tailwind para height y flexbox */
 }
 
 .sidebar {
+  @apply fixed h-full bg-opacity-10 pt-5 text-white select-none; /* Aplica Tailwind */
   width: 250px; /* Ancho fijo del Sidebar */
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  position: fixed;
-  top: 0;
   left: 0;
   z-index: 1;
-  padding-top: 20px;
-  user-select: none;
 }
 
 .code {
-  flex-grow: 1; /* Para que ocupe todo el espacio restante */
-  padding: 24px;
-  background-color: #222222;
-  margin-left: 250px; /* Asegurar que no se superponga con el Sidebar */
+  flex-grow: 1; /* Ocupa todo el espacio restante */
+  height: 100vh; /* Asegurar altura completa */
+  margin-left: 250px; /* Dejar espacio para el Sidebar */
+  overflow: hidden; /* Quitar el scroll principal */
 }
 
 .code__editor {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 48px); /* Ajustar la altura para el padding */
   border: none;
   outline: none;
   padding: 10px;
@@ -38,4 +31,7 @@
   resize: none;
   user-select: text;
   background-color: #222222;
+  overflow-y: auto; /* Activar el desplazamiento vertical */
+  color: #ffffff; /* Color del texto */
+  white-space: pre-wrap; /* Mantener los saltos de línea */
 }
