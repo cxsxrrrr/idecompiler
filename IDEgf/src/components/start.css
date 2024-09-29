@@ -1,0 +1,46 @@
+/* start.css */
+.start-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+
+    gap: 40px; /*! Espacio entre los cuadrados */
+}
+
+.square, .square2 {
+    caret-color: transparent;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-family: JetBrains Mono, monospace;
+    font-weight: 600;
+    text-align: center;
+
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.square {
+    background-color: #312550; /* Verde */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Drop shadow */
+}
+
+.square2 {
+    background-color: #312550; /* Azul */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(50, 27, 27, 0.19); /* Drop shadow */
+}
+
+.square:hover, .square2:hover {
+    transform: scale(1.05); /* Efecto de zoom al pasar el mouse */
+    color: white;
+}
+
+.square::after, .square2::after {
+    content: attr(data-text); /* Atributo personalizado para mostrar el texto */
+}
+

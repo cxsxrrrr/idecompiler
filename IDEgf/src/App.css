@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .app-container {
-  @apply flex h-screen; /* Utiliza Tailwind para height y flexbox */
+  @apply flex h-screen;; /* Utiliza Tailwind para height y flexbox */
 }
 
 .sidebar {
@@ -14,6 +14,16 @@
 }
 
 .code {
+  @apply h-screen;
+  height: 100vh; /* Asegurar altura completa */
+  flex-grow: 1; /* Ocupa todo el espacio restante */
+  height: 100vh; /* Asegurar altura completa */
+  margin-left: 250px; /* Dejar espacio para el Sidebar */
+
+  overflow: auto; /* Activar scroll si es necesario */
+}
+
+.start-container {
   flex-grow: 1; /* Ocupa todo el espacio restante */
   height: 100vh; /* Asegurar altura completa */
   margin-left: 250px; /* Dejar espacio para el Sidebar */
@@ -21,6 +31,7 @@
 }
 
 .code__editor {
+  height: 100%;
   width: 100%;
   height: calc(100vh - 48px); /* Ajustar la altura para el padding */
   border: none;

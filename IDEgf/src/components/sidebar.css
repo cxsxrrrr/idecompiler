@@ -3,7 +3,7 @@
   height: 100%;
   width: 250px;
   position: fixed;
-  z-index: 1;
+  z-index: 9999;
   top: 0;
   left: 0;
   background-color: rgba(255, 255, 255, 0.229);
@@ -29,6 +29,7 @@
     flex: 0 0 auto;
     gap: 7px;
     position: relative;
+    transition: all 0.3s ease;
   }
   
   .navigation .close {
@@ -43,6 +44,7 @@
   .navigation .close:hover {
     background-color: #c8342a;
     cursor: pointer;
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
   }
   
   .navigation .minimize {
@@ -57,6 +59,7 @@
   .navigation .minimize:hover {
     background-color: #c8a640;
     cursor: pointer;
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
   }
   
   .navigation .fullscreen {
@@ -70,6 +73,7 @@
   .navigation .fullscreen:hover {
     background-color: #3e8f3b;
     cursor: pointer;
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
   }
   
   .navigation .text-wrapper {
