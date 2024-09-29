@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify
 import os
-from flask_cors import CORS
+from flask import Flask, request, jsonify
+from flask_cors import CORS 
+
 app = Flask(__name__)
 CORS(app) 
 
@@ -9,6 +10,8 @@ FILES_DIRECTORY = 'backend/files'
 
 # Asegúrate de que el directorio exista
 os.makedirs(FILES_DIRECTORY, exist_ok=True)
+
+
 
 @app.route('/create-file', methods=['POST'])
 def create_file():
