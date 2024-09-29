@@ -26,12 +26,12 @@ const Start = () => {
   return (
     <div className='start-container flex justify-center items-center h-screen bg-gray-900'>
       {/* Cuadrado para "Crear Archivo" */}
-      <div className='square bg-green-500 shadow-lg hover:shadow-xl' onClick={handleCreateFile}>
+      <div className='square bg-#2222 shadow-lg hover:shadow-xl' onClick={handleCreateFile}>
         Crear Archivo
       </div>
 
       {/* Cuadrado para "Abrir Archivo" */}
-      <div className='square2 bg-blue-500 shadow-lg hover:shadow-xl' onClick={handleOpenFile}>
+      <div className='square2 bg-#2222 shadow-lg hover:shadow-xl' onClick={handleOpenFile}>
         Abrir Archivo
       </div>
 

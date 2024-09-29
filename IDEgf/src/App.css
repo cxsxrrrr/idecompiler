@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden; /* Evita scroll horizontal */
+}
+
+body {
+  height: 100vh; /* Asegúrate de que el body no tenga más altura de la necesaria */
+}
+
 .app-container {
   @apply flex h-screen;; /* Utiliza Tailwind para height y flexbox */
 }
@@ -14,7 +24,10 @@
 }
 
 .code {
+
   @apply h-screen;
+  margin-top: 30px;
+
   height: 100vh; /* Asegurar altura completa */
   flex-grow: 1; /* Ocupa todo el espacio restante */
   height: 100vh; /* Asegurar altura completa */
