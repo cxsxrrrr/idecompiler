@@ -1,0 +1,44 @@
+nav {
+    caret-color: transparent;
+    transition: all 4s ease-in-out;
+}
+
+.mas:hover {
+    transform: scale(1.5);
+    color: rgb(205, 205, 205);
+}
+
+
+
+/* Estilo para el botón de cerrar pestaña */
+.close-tab-button {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6b6b6b; /* Color gris oscuro */
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .close-tab-button:hover {
+    color: #c7c7c7; /* Color gris más claro en hover */
+
+  }
+  
+  li {
+    position: relative;
+    padding-right: 20px; /* Asegura espacio para la "X" */
+  }
+  
+  .nav ul li:hover .close-tab-button {
+    visibility: visible;
+  }
+  
+  /* Espacio adicional para la pestaña activa */
+  .nav ul li {
+    padding: 0 10px;
+  }

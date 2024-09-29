@@ -1,3 +1,4 @@
+
 /* start.css */
 .start-container {
     display: flex;
@@ -26,12 +27,12 @@
 }
 
 .square {
-    background-color: #312550; /* Verde */
+    background-color: hsl(258, 19%, 18%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Drop shadow */
 }
 
 .square2 {
-    background-color: #312550; /* Azul */
+    background-color: hsl(258, 19%, 18%); /* Azul */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(50, 27, 27, 0.19); /* Drop shadow */
 }
 
