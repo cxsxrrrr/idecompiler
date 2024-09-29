@@ -88,3 +88,49 @@
     position: relative;
   }
   
+  /* Estilo para los botones del sidebar */
+.sidebar-buttons {
+  display: flex;
+  flex-direction: row; /* Los botones estarán alineados horizontalmente */
+  justify-content: space-between;
+  height: 10px; /* Mantiene la altura de los botones */
+  padding: 0 20px; /* Espaciado lateral opcional */
+  margin-top: 10px; /* Espaciado superior para bajar los botones */
+}
+
+.sidebar-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.sidebar-button img {
+  width: 20px; /* Ajusta el tamaño del ícono según tu preferencia */
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-button:hover img {
+  transform: scale(1.2); /* Efecto de zoom al pasar el cursor */
+}
+
+.sidebar-button[title] {
+  position: relative;
+}
+
+.sidebar-button[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 12px;
+}

@@ -44,3 +44,50 @@
     content: attr(data-text); /* Atributo personalizado para mostrar el texto */
 }
 
+/* Estilo para los botones del sidebar */
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% + 20px); /* Aumentar la altura total en 20px */
+    padding: 20px 0; 
+}
+
+  
+  .sidebar-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .sidebar-button img {
+    width: 32px; /* Ajusta el tamaño de los iconos según prefieras */
+    height: 32px;
+    transition: transform 0.2s ease;
+  }
+  
+  .sidebar-button:hover img {
+    transform: scale(1.2); /* Efecto de zoom al pasar el cursor */
+  }
+  
+  .sidebar-button[title] {
+    position: relative;
+  }
+  
+  .sidebar-button[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    top: 50%;
+    left: 110%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1;
+    font-size: 12px;
+  }
+  
