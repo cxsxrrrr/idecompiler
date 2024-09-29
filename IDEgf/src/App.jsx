@@ -66,7 +66,7 @@ function App() {
         onNewTabClick={handleNewTab}
         onTabClose={handleTabClose} // Añadimos la opción de cerrar una pestaña
       />
-      <Sidebar />
+      <Sidebar onFileCreate={handleFileCreate} onFileOpen={handleFileOpen} />
       {activeTabIndex !== null && tabs[activeTabIndex] ? (
         tabs[activeTabIndex].type === 'start' ? (
           <Start

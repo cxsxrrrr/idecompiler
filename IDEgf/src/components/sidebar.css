@@ -91,15 +91,21 @@
   
   /* Estilo para los botones del sidebar */
 .sidebar-buttons {
+
   display: flex;
   flex-direction: row; /* Los botones estarán alineados horizontalmente */
   justify-content: space-between;
   height: 10px; /* Mantiene la altura de los botones */
   padding: 0 20px; /* Espaciado lateral opcional */
   margin-top: 10px; /* Espaciado superior para bajar los botones */
+
+
 }
 
 .sidebar-button {
+
+  margin-top: 5px;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,7 +132,9 @@
   position: absolute;
   bottom: -25px;
   left: 50%;
-  transform: translateX(-50%);
+
+  transform: translate(-50%, 57%);
+
   background-color: rgba(0, 0, 0, 0.75);
   color: white;
   padding: 4px 8px;
