@@ -10,6 +10,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
   const [showGuardadoDropdown, setShowGuardadoDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false); // Modal para crear archivo
   const [fileName, setFileName] = useState(''); // Nombre del archivo a crear
+  const [showChat, setShowChat] = useState(false); // Estado para controlar la visibilidad de ChatAi
   const [notification, setNotification] = useState({ show: false, message: '', type: '' }); // Notificaciones
   const fileInputRef = useRef(null); // Ref para el input de abrir archivo
   const carpetasRef = useRef(null);
@@ -31,6 +32,16 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [carpetasRef, guardadoRef]);
+
+  const handleOpenChat = () => {
+
+    setShowChat(true); // Esto debería venir de las props del componente App
+  };
+
+  // Definición de la función `handleCloseChat`
+  const handleCloseChat = () => {
+    setShowChat(false);
+  };
 
   // Función para manejar el clic en "Crear Archivo"
   const handleCreateFile = () => {
@@ -187,10 +198,10 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
             )}
           </div>
 
-          {/* Botón IA */}
-          <div className="sidebar-button">
-            <img src={IA} alt="IA" />
-          </div>
+          {/*! Botón IA */}
+          <div className="sidebar-button" onClick={() => window.open('https://gemini.google.com/app', '_blank')}>
+  <img src={IA} alt="IA" />
+</div>
 
           {/* Botón Ejecutar */}
           <div className="sidebar-button">
