@@ -6,6 +6,7 @@ import run from '../assets/icons/run.png';
 import Save from '../assets/icons/Save.png';
 
 function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }) {
+  const [filesList, setFilesList] = useState([]);
   const [showCarpetasDropdown, setShowCarpetasDropdown] = useState(false);
   const [showGuardadoDropdown, setShowGuardadoDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false); // Modal para crear archivo
@@ -36,6 +37,10 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
   const handleOpenChat = () => {
 
     setShowChat(true); // Esto debería venir de las props del componente App
+  };
+
+  const handleFileClick = (fileName) => {
+    onFileOpen({ name: fileName, content: '' }); // Llama a la función pasada desde App.jsx
   };
 
   // Definición de la función `handleCloseChat`
@@ -76,6 +81,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
       } else {
         showNotification(data.message, 'success');
         onFileCreate(fileName); // Llama a la función para actualizar el estado en App
+        setFilesList([...filesList, fileName]); // Añadir el nuevo archivo a la lista
         handleCloseModal(); // Cierra el modal
       }
     })
@@ -140,7 +146,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
           </div>
           <div className="text-wrapper">Editor</div>
         </div>
-
+  
         <div className="sidebar-buttons">
           {/* Botón Carpetas */}
           <div ref={carpetasRef} className="relative sidebar-button">
@@ -168,7 +174,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
               </div>
             )}
           </div>
-
+  
           {/* Input oculto para abrir archivos */}
           <input
             type="file"
@@ -176,7 +182,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
             style={{ display: 'none' }}
             onChange={handleFileChange}
           />
-
+  
           {/* Botón Guardado */}
           <div ref={guardadoRef} className="relative sidebar-button">
             <img
@@ -197,19 +203,31 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
               </div>
             )}
           </div>
-
-          {/*! Botón IA */}
+  
+          {/* Botón IA */}
           <div className="sidebar-button" onClick={() => window.open('https://gemini.google.com/app', '_blank')}>
-  <img src={IA} alt="IA" />
-</div>
-
+            <img src={IA} alt="IA" />
+          </div>
+  
           {/* Botón Ejecutar */}
           <div className="sidebar-button">
             <img src={run} alt="Ejecutar" />
           </div>
         </div>
+  
+        {/* Lista de Archivos */}
+        <div className="files-list">
+          <h3 className="text-white">Archivos</h3>
+          <ul>
+            {filesList.map((file, index) => (
+              <li key={index} className="text-white cursor-pointer" onClick={() => handleFileClick(file)}>
+                {file}
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
-
+  
       {/* Modal para crear archivo */}
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
@@ -239,7 +257,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
           </div>
         </div>
       )}
-
+  
       {/* Notificación */}
       {notification.show && (
         <div className={`fixed bottom-5 right-5 p-4 bg-${notification.type === 'success' ? 'green-500' : 'red-500'} rounded`}>
@@ -249,5 +267,4 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
     </>
   );
 }
-
 export default Sidebar;

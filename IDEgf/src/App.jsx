@@ -7,6 +7,7 @@ import Footer from './components/footer';
 import './App.css';
 
 function App() {
+  const [filesList, setFilesList] = useState([]); // Estado para almacenar la lista de archivos
   const [tabs, setTabs] = useState([]); // Inicializa sin pestañas
   const [activeTabIndex, setActiveTabIndex] = useState(null); // Índice de la pestaña activa
 
@@ -24,10 +25,13 @@ function App() {
 
   // Función para abrir un archivo y crear una pestaña para él
   const handleFileOpen = (file) => {
-    const newTabs = tabs.filter(tab => tab.type !== 'start'); // Eliminar la pestaña de 'start' si existe
-    const newTab = { type: 'code', id: file.name, content: file.content }; // Crear nueva pestaña con el archivo
-    setTabs([...newTabs, newTab]); // Agregar nueva pestaña al estado
-    setActiveTabIndex(newTabs.length); // Cambiar a la nueva pestaña
+    const newTab = {
+      name: file.name, // Usar el nombre del archivo
+      content: file.content,
+      type: 'code', // Asume que el tipo es 'code'
+    };
+    setTabs([...tabs, newTab]);
+    setActiveTabIndex(tabs.length); // Establece la nueva pestaña como activa
   };
 
   // Función para crear un archivo y crear una pestaña para él
@@ -36,6 +40,7 @@ function App() {
     const newTab = { type: 'code', id: fileName, content: '' }; // Crear nueva pestaña con el nuevo archivo
     setTabs([...newTabs, newTab]); // Agregar nueva pestaña al estado
     setActiveTabIndex(newTabs.length); // Cambiar a la nueva pestaña
+    setFilesList([...filesList, fileName]); // Añadir el nuevo archivo a la lista
   };
 
   // Función para actualizar el contenido de una pestaña
@@ -87,6 +92,8 @@ function App() {
     }
   };
 
+  
+
   // Nueva función para obtener el contenido del archivo actual
   const getCurrentFileContent = () => {
     return activeTabIndex !== null ? tabs[activeTabIndex].content : ''; // Devuelve el contenido del archivo actual o vacío
@@ -107,6 +114,7 @@ function App() {
         onFileSave={handleFileSave} 
         onFileSaveAs={handleFileSaveAs}
         getCurrentFileContent={getCurrentFileContent} // Pasa la función aquí
+        filesList={filesList} // Pasar la lista de archivos al Sidebar
       />
       {activeTabIndex !== null && tabs[activeTabIndex] ? (
         tabs[activeTabIndex].type === 'start' ? (

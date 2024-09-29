@@ -10,7 +10,7 @@ function Navbar({ tabs, activeTabIndex, onTabClick, onNewTabClick, onTabClose })
             className={`relative cursor-pointer flex items-center ${activeTabIndex === index ? 'font-bold' : ''} `}
             onClick={() => onTabClick(index)}
           >
-            <span>{tab.type === 'start' ? 'Nuevo Archivo' : tab.id}</span>
+            <span>{tab.type === 'start' ? 'Nuevo Archivo' : tab.name}</span>
             
             {/* Botón para cerrar la pestaña */}
             <button
