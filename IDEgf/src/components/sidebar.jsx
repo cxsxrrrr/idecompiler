@@ -5,7 +5,7 @@ import IA from '../assets/icons/IA.png';
 import run from '../assets/icons/run.png';
 import Save from '../assets/icons/Save.png';
 
-function Sidebar({ onFileCreate, onFileOpen, onFileSave }) {
+function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }) {
   const [showCarpetasDropdown, setShowCarpetasDropdown] = useState(false);
   const [showGuardadoDropdown, setShowGuardadoDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false); // Modal para crear archivo
@@ -100,6 +100,24 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave }) {
     onFileSave(); // Llama a la función pasada desde el componente padre (App.js)
   };
 
+  // Función para manejar el clic en "Guardar como"
+  const handleSaveAs = async () => {
+    const currentContent = getCurrentFileContent(); // Obtiene el contenido actual
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: 'nombre_del_archivo.txt',
+      types: [{
+        description: 'Text Files',
+        accept: {
+          'text/plain': ['.txt'],
+        },
+      }],
+    });
+
+    const writableStream = await fileHandle.createWritable();
+    await writableStream.write(currentContent);
+    await writableStream.close();
+  };
+
   return (
     <>
       <aside className="sidebar">
@@ -161,7 +179,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave }) {
                   <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer" onClick={handleSaveFile}>
                     Guardar
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer">
+                  <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer" onClick={handleSaveAs}>
                     Guardar como
                   </li>
                 </ul>
@@ -202,7 +220,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave }) {
               </button>
               <button
                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                onClick={() => createFileOnBackend(fileName)} // Crea el archivo
+                onClick={() => createFileOnBackend(fileName)} // Crea el archivo en el backend
               >
                 Crear
               </button>
@@ -213,11 +231,8 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave }) {
 
       {/* Notificación */}
       {notification.show && (
-        <div
-          className={`fixed bottom-5 right-5 px-4 py-2 rounded-lg shadow-lg text-white 
-          ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}
-        >
-          {notification.message}
+        <div className={`fixed bottom-5 right-5 p-4 bg-${notification.type === 'success' ? 'green-500' : 'red-500'} rounded`}>
+          <p className="text-white">{notification.message}</p>
         </div>
       )}
     </>

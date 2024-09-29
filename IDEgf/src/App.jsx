@@ -65,9 +65,31 @@ function App() {
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = currentTab.id; // Usa el id (nombre del archivo) como nombre del archivo descargado
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       URL.revokeObjectURL(link.href); // Libera la URL
     }
+  };
+
+  // Función para manejar "Guardar como"
+  const handleFileSaveAs = () => {
+    if (activeTabIndex !== null) {
+      const currentTab = tabs[activeTabIndex];
+      const blob = new Blob([currentTab.content], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = currentTab.id; // Usa el id (nombre del archivo) como nombre del archivo descargado
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href); // Libera la URL
+    }
+  };
+
+  // Nueva función para obtener el contenido del archivo actual
+  const getCurrentFileContent = () => {
+    return activeTabIndex !== null ? tabs[activeTabIndex].content : ''; // Devuelve el contenido del archivo actual o vacío
   };
 
   return (
@@ -79,7 +101,13 @@ function App() {
         onNewTabClick={handleNewTab}
         onTabClose={handleTabClose} // Añadimos la opción de cerrar una pestaña
       />
-      <Sidebar onFileCreate={handleFileCreate} onFileOpen={handleFileOpen} onFileSave={handleFileSave} />
+      <Sidebar 
+        onFileCreate={handleFileCreate} 
+        onFileOpen={handleFileOpen} 
+        onFileSave={handleFileSave} 
+        onFileSaveAs={handleFileSaveAs}
+        getCurrentFileContent={getCurrentFileContent} // Pasa la función aquí
+      />
       {activeTabIndex !== null && tabs[activeTabIndex] ? (
         tabs[activeTabIndex].type === 'start' ? (
           <Start
