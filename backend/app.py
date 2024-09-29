@@ -3,6 +3,7 @@ import os
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app) 
+
 # Define el directorio donde se guardarán los archivos
 FILES_DIRECTORY = 'backend/files'
 
@@ -17,13 +18,11 @@ def create_file():
     if not file_name:
         return jsonify({"error": "El nombre del archivo es requerido."}), 400
 
-    # Asegúrate de que el nombre del archivo tenga la extensión
-    if not file_name.endswith('.txt'):  # Cambia '.txt' por la extensión deseada
-        return jsonify({"error": "El archivo debe tener una extensión válida (ejemplo: .txt)."}), 400
-
+    # Ya no verificamos la extensión del archivo
     file_path = os.path.join(FILES_DIRECTORY, file_name)
 
     try:
+        # Crea el archivo en blanco con el nombre proporcionado
         with open(file_path, 'w') as f:
             f.write("")  # Escribe contenido inicial si es necesario
         return jsonify({"message": f"Archivo '{file_name}' creado exitosamente."}), 201

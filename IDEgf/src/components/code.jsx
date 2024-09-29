@@ -1,13 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./code.css";
 
-const Code = ({ initialCode }) => {
+const Code = ({ initialCode, onCodeChange }) => {
   const [code, setCode] = useState(initialCode); // Estado para almacenar el código
   const lineCount = code.split("\n").length; // Contar líneas basadas en saltos de línea
   const textareaRef = useRef(null); // Referencia al textarea
 
+  useEffect(() => {
+    setCode(initialCode); // Actualiza el estado cuando el código inicial cambia (al cambiar de pestaña)
+  }, [initialCode]);
+
   const handleChange = (e) => {
-    setCode(e.target.value); // Actualizar el estado del código
+    const newCode = e.target.value;
+    setCode(newCode); // Actualizar el estado del código localmente
+    onCodeChange(newCode); // Llamar a la función para actualizar el código en el padre (App.js)
   };
 
   const handleScroll = (e) => {

@@ -4,6 +4,7 @@ import './start.css';
 const Start = ({ onFileCreate, onFileOpen }) => {
   const [showModal, setShowModal] = useState(false); // Controla la visibilidad del modal
   const [fileName, setFileName] = useState(''); // Guarda el nombre del archivo
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' }); // Maneja notificaciones
   const fileInputRef = useRef(null);
 
   //! Función para manejar el clic en el cuadrado de "Abrir Archivo"
@@ -47,21 +48,29 @@ const Start = ({ onFileCreate, onFileOpen }) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
-        alert(`Error: ${data.error}`);
+        showNotification(data.error, 'error');
       } else {
-        alert(`Éxito: ${data.message}`);
+        showNotification(data.message, 'success');
         onFileCreate(fileName); // Llama a la función para actualizar el estado en App
         handleCloseModal(); // Restablece el nombre del archivo y cierra el modal
       }
     })
     .catch((error) => {
       console.error('Error al crear el archivo:', error);
-      alert('Ocurrió un error al intentar crear el archivo.');
+      showNotification('Ocurrió un error al intentar crear el archivo.', 'error');
     });
   };
 
+  //! Función para mostrar notificaciones
+  const showNotification = (message, type) => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000); // Ocultar la notificación después de 3 segundos
+  };
+
   return (
-    <div className='start-container flex justify-center items-center h-screen bg-gray-900'>
+    <div className='start-container flex justify-center items-center h-screen bg-#2222'>
       {/* Cuadrado para "Crear Archivo" */}
       <div className='square bg-#2222 shadow-lg hover:shadow-xl' onClick={handleCreateFile}>
         Crear Archivo
@@ -107,6 +116,16 @@ const Start = ({ onFileCreate, onFileOpen }) => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Modal de Notificación */}
+      {notification.show && (
+        <div
+          className={`fixed bottom-5 right-5 px-4 py-2 rounded-lg shadow-lg text-white 
+          ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}
+        >
+          {notification.message}
         </div>
       )}
     </div>
