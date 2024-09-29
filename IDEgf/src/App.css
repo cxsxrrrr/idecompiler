@@ -44,12 +44,12 @@ body {
 }
 
 .code__editor {
+  margin-top: 10px;
   height: 100%;
   width: 100%;
   height: calc(100vh - 48px); /* Ajustar la altura para el padding */
   border: none;
   outline: none;
-  padding: 10px;
   font-family: monospace;
   font-size: 16px;
   resize: none;

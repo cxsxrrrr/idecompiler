@@ -1,38 +1,34 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 import os
-
+from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)  # Habilitar CORS
+CORS(app) 
+# Define el directorio donde se guardarán los archivos
+FILES_DIRECTORY = 'backend/files'
+
+# Asegúrate de que el directorio exista
+os.makedirs(FILES_DIRECTORY, exist_ok=True)
 
 @app.route('/create-file', methods=['POST'])
 def create_file():
     data = request.get_json()
-    file_name = data.get('fileName', '')
+    file_name = data.get('fileName')
 
     if not file_name:
-        return jsonify({'error': 'El nombre del archivo es obligatorio'}), 400
+        return jsonify({"error": "El nombre del archivo es requerido."}), 400
 
-    if not '.' in file_name:
-        file_name += '.txt'
+    # Asegúrate de que el nombre del archivo tenga la extensión
+    if not file_name.endswith('.txt'):  # Cambia '.txt' por la extensión deseada
+        return jsonify({"error": "El archivo debe tener una extensión válida (ejemplo: .txt)."}), 400
 
-    file_path = os.path.join('files', file_name)
+    file_path = os.path.join(FILES_DIRECTORY, file_name)
 
     try:
-        # Crear archivo vacío
         with open(file_path, 'w') as f:
-            f.write("")  # Puedes personalizar el contenido inicial
-
-        # Leer el contenido del archivo después de crearlo
-        with open(file_path, 'r') as f:
-            content = f.read()
-
-        return jsonify({'message': f'Archivo {file_name} creado exitosamente', 'content': content}), 200
+            f.write("")  # Escribe contenido inicial si es necesario
+        return jsonify({"message": f"Archivo '{file_name}' creado exitosamente."}), 201
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    if not os.path.exists('files'):
-        os.makedirs('files')
-
     app.run(debug=True)

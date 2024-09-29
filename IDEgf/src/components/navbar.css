@@ -1,0 +1,9 @@
+nav {
+    caret-color: transparent;
+    transition: all 4s ease-in-out;
+}
+
+.mas:hover {
+    transform: scale(1.5);
+    color: rgb(205, 205, 205);
+}

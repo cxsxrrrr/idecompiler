@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import "./code.css";
 
-const Code = () => {
-  const [code, setCode] = useState(""); // Estado para almacenar el código
+const Code = ({ initialCode }) => {
+  const [code, setCode] = useState(initialCode); // Estado para almacenar el código
   const lineCount = code.split("\n").length; // Contar líneas basadas en saltos de línea
   const textareaRef = useRef(null); // Referencia al textarea
 
