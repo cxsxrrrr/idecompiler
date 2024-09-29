@@ -5,7 +5,7 @@ import IA from '../assets/icons/IA.png';
 import run from '../assets/icons/run.png';
 import Save from '../assets/icons/Save.png';
 
-function Sidebar({ onFileCreate, onFileOpen }) {
+function Sidebar({ onFileCreate, onFileOpen, onFileSave }) {
   const [showCarpetasDropdown, setShowCarpetasDropdown] = useState(false);
   const [showGuardadoDropdown, setShowGuardadoDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false); // Modal para crear archivo
@@ -95,6 +95,11 @@ function Sidebar({ onFileCreate, onFileOpen }) {
     }, 3000); // Ocultar la notificación después de 3 segundos
   };
 
+  // Función para manejar el clic en "Guardar"
+  const handleSaveFile = () => {
+    onFileSave(); // Llama a la función pasada desde el componente padre (App.js)
+  };
+
   return (
     <>
       <aside className="sidebar">
@@ -153,7 +158,7 @@ function Sidebar({ onFileCreate, onFileOpen }) {
             {showGuardadoDropdown && (
               <div className="absolute top-5 left-1 mt-2 w-40 bg-gray-900 rounded shadow-lg">
                 <ul className="py-1 text-sm text-white">
-                  <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer">
+                  <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer" onClick={handleSaveFile}>
                     Guardar
                   </li>
                   <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer">
