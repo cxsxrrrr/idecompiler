@@ -1,0 +1,144 @@
+
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.229);
+  overflow-x: hidden;
+  padding-top: 20px;
+  user-select: none;
+}
+
+
+.navigation {
+
+    border-radius: 10px 10px 0px 0px;
+    display: flex;
+    gap: 16px;
+    padding: 2px 24px;
+    position: relative;
+    user-select: none;
+  }
+  
+  .navigation .controls {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 7px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .navigation .close {
+    background-color: #f44336;
+    border-radius: 8px;
+    height: 16px;
+    user-select: none;
+    position: relative;
+    width: 16px;
+  }
+
+  .navigation .close:hover {
+    background-color: #c8342a;
+    cursor: pointer;
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
+  }
+  
+  .navigation .minimize {
+    background-color: #ffc107;
+    border-radius: 8px;
+    height: 16px;
+    user-select: none;
+    position: relative;
+    width: 16px;
+  }
+
+  .navigation .minimize:hover {
+    background-color: #c8a640;
+    cursor: pointer;
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
+  }
+  
+  .navigation .fullscreen {
+    background-color: #4caf50;
+    border-radius: 8px;
+    height: 16px;
+    user-select: none;
+    position: relative;
+    width: 16px;
+  }
+  .navigation .fullscreen:hover {
+    background-color: #3e8f3b;
+    cursor: pointer;
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
+  }
+  
+  .navigation .text-wrapper {
+    color: var(--whitetransparent-80);
+    flex: 1;
+    font-family: "Roboto-Bold", Helvetica;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+  }
+  
+  /* Estilo para los botones del sidebar */
+.sidebar-buttons {
+
+  display: flex;
+  flex-direction: row; /* Los botones estarán alineados horizontalmente */
+  justify-content: space-between;
+  height: 10px; /* Mantiene la altura de los botones */
+  padding: 0 20px; /* Espaciado lateral opcional */
+  margin-top: 10px; /* Espaciado superior para bajar los botones */
+
+
+}
+
+.sidebar-button {
+
+  margin-top: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.sidebar-button img {
+  width: 20px; /* Ajusta el tamaño del ícono según tu preferencia */
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-button:hover img {
+  transform: scale(1.2); /* Efecto de zoom al pasar el cursor */
+}
+
+.sidebar-button[title] {
+  position: relative;
+}
+
+.sidebar-button[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+
+  transform: translate(-50%, 57%);
+
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 12px;
+}

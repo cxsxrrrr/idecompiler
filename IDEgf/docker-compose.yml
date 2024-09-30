@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    image: python:3.11-slim
+    volumes:
+      - .:/app
+    working_dir: /app/backend
+    command: >
+      sh -c "
+      pip install --no-cache-dir -r requirements.txt &&
+      python app.py
+      "
+    ports:
+      - "5000:5000"
+  
+  frontend:
+    image: node:20
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+      yarn install &&
+      yarn run dev
+      "
+    ports:
+      - "5173:5173"

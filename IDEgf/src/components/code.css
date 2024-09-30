@@ -1,0 +1,37 @@
+.code {
+  display: flex; /* Alinear números de línea y editor en fila */
+  margin-left: 250px; /* Asegura que no se superponga con el Sidebar */
+  height: 100vh; /* Ocupar toda la altura de la pantalla */
+  background-color: #222222; /* Fondo oscuro */
+  color: #ffffff; /* Color del texto */
+}
+
+.line-numbers {
+  width: 40px; /* Ancho fijo para los números de línea */
+  text-align: left; /* Alinear los números a la izquierda */
+  color: #888; /* Color de los números de línea */
+  padding-top: 4px; /* Ajuste de alineación vertical */
+  user-select: none; /* Evita que se seleccionen los números */
+  overflow: hidden;
+  padding-left: 17px;
+}
+
+.line-number {
+  height: 20px; /* Altura mínima para cada número */
+  margin-top: 4px;
+}
+
+.code__editor {
+  flex-grow: 1; /* Ocupa el espacio restante del contenedor */
+  border: none;
+  outline: none;
+  padding-left: 0; /* Quitar el padding izquierdo para alinear mejor */
+  font-family: monospace;
+  font-size: 16px;
+  resize: none;
+  user-select: text;
+  background-color: #222222;
+  color: #ffffff; /* Color del texto en el textarea */
+  overflow-y: auto; /* Desplazamiento vertical */
+  white-space: pre; /* Mantener los saltos de línea */
+}

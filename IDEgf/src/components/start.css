@@ -1,0 +1,94 @@
+
+/* start.css */
+.start-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+
+    gap: 40px; /*! Espacio entre los cuadrados */
+}
+
+.square, .square2 {
+    caret-color: transparent;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-family: JetBrains Mono, monospace;
+    font-weight: 600;
+    text-align: center;
+
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.square {
+    background-color: hsl(258, 19%, 18%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Drop shadow */
+}
+
+.square2 {
+    background-color: hsl(258, 19%, 18%); /* Azul */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(50, 27, 27, 0.19); /* Drop shadow */
+}
+
+.square:hover, .square2:hover {
+    transform: scale(1.05); /* Efecto de zoom al pasar el mouse */
+    color: white;
+}
+
+.square::after, .square2::after {
+    content: attr(data-text); /* Atributo personalizado para mostrar el texto */
+}
+
+/* Estilo para los botones del sidebar */
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% + 20px); /* Aumentar la altura total en 20px */
+    padding: 20px 0; 
+}
+
+  
+  .sidebar-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .sidebar-button img {
+    width: 32px; /* Ajusta el tamaño de los iconos según prefieras */
+    height: 32px;
+    transition: transform 0.2s ease;
+  }
+  
+  .sidebar-button:hover img {
+    transform: scale(1.2); /* Efecto de zoom al pasar el cursor */
+  }
+  
+  .sidebar-button[title] {
+    position: relative;
+  }
+  
+  .sidebar-button[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    top: 50%;
+    left: 110%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1;
+    font-size: 12px;
+  }
+  
