@@ -61,14 +61,30 @@ function App() {
   const handleFileSave = () => {
     if (activeTabIndex !== null) {
       const currentTab = tabs[activeTabIndex];
-      const blob = new Blob([currentTab.content], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = currentTab.id; // Usa el id (nombre del archivo) como nombre del archivo descargado
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href); // Libera la URL
+      const currentContent = currentTab.content; // Asegurarse de usar el contenido actual
+  
+      // Enviar el contenido del archivo al backend para guardarlo
+      fetch('http://localhost:5000/save-file', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileName: currentTab.id, // Nombre del archivo
+          content: currentContent,  // Contenido del archivo
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            console.error("Error al guardar el archivo en el backend:", data.error);
+          } else {
+            console.log("Archivo guardado exitosamente en el backend.");
+          }
+        })
+        .catch(error => {
+          console.error("Error al comunicarse con el backend:", error);
+        });
     }
   };
 
@@ -76,7 +92,10 @@ function App() {
   const handleFileSaveAs = () => {
     if (activeTabIndex !== null) {
       const currentTab = tabs[activeTabIndex];
-      const blob = new Blob([currentTab.content], { type: 'text/plain' });
+      const currentContent = currentTab.content; // Definir correctamente el contenido actual
+  
+      // Crear un blob para descargar localmente
+      const blob = new Blob([currentContent], { type: 'text/plain' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = currentTab.id; // Usa el id (nombre del archivo) como nombre del archivo descargado
@@ -84,8 +103,11 @@ function App() {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href); // Libera la URL
+  
+      // Enviar el contenido del archivo al backend para sobrescribirlo
     }
   };
+  
 
   // Nueva función para obtener el contenido del archivo actual
   const getCurrentFileContent = () => {

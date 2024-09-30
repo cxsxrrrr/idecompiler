@@ -1,0 +1,66 @@
+.folder-tree {
+    margin: 20px 0;
+    border-radius: 30px;
+    background-color: rgb(85, 86, 94);
+    padding: 20px;
+  }
+  
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  li:hover {
+    color: rgb(219, 225, 190);
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+  
+  .delete-icon {
+    margin-left: 10px;
+    color: red;
+    cursor: pointer;
+    visibility: hidden;
+  }
+  
+  li:hover .delete-icon {
+    visibility: visible;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .modal-button {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .modal-button.confirm {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .modal-button.cancel {
+    background-color: #f44336;
+    color: white;
+  }
+  

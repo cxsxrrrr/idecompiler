@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './sidebar.css';
+import FolderTree from './FolderTree';
 import files from '../assets/icons/files.png';
 import IA from '../assets/icons/IA.png';
 import run from '../assets/icons/run.png';
@@ -150,7 +151,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
               onClick={() => setShowCarpetasDropdown(!showCarpetasDropdown)}
             />
             {showCarpetasDropdown && (
-              <div className="absolute top-5 left-3 mt-2 w-40 bg-gray-900 rounded shadow-lg">
+              <div className="absolute top-5 left-3 mt-2 w-40 bg-gray-900 rounded shadow-lg z-50">
                 <ul className="py-1 text-sm text-white">
                   <li
                     className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
@@ -185,7 +186,7 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
               onClick={() => setShowGuardadoDropdown(!showGuardadoDropdown)}
             />
             {showGuardadoDropdown && (
-              <div className="absolute top-5 left-1 mt-2 w-40 bg-gray-900 rounded shadow-lg">
+              <div className="absolute top-5 left-1 mt-2 w-40 bg-gray-900 rounded shadow-lg z-50">
                 <ul className="py-1 text-sm text-white">
                   <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer" onClick={handleSaveFile}>
                     Guardar
@@ -207,6 +208,9 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
           <div className="sidebar-button">
             <img src={run} alt="Ejecutar" />
           </div>
+        </div>
+        <div className="folder-tree-container">
+          <FolderTree onFileOpen={onFileOpen} />
         </div>
       </aside>
 
