@@ -60,7 +60,7 @@ function FolderTree({ onFileOpen }) {
   };
 
   return (
-    <div className="folder-tree p-5 bg-gray-700 rounded-lg">
+    <div className="folder-tree p-5 bg-gray-700 rounded-lg mt-6">
       <h3 className="text-white mb-4">Archivos</h3>
       <ul>
         {files.map((file, index) => (
