@@ -4,13 +4,15 @@ import Navbar from './components/navbar';
 import Sidebar from './components/sidebar';
 import Code from './components/code';
 import Footer from './components/footer';
+import Terminal from './components/terminal';
 import './App.css';
 
 function App() {
   const [tabs, setTabs] = useState([]); // Inicializa sin pestañas
   const [activeTabIndex, setActiveTabIndex] = useState(null); // Índice de la pestaña activa
   const [syntaxTree, setSyntaxTree] = useState(null);
-
+  const [showTerminal, setShowTerminal] = useState(false); // Estado para mostrar el terminal
+  const [terminalOutput, setTerminalOutput] = useState(''); // Estado para el contenido del terminal
   // Función para agregar una nueva pestaña
   const handleNewTab = () => {
     const newTab = { type: 'start', id: Date.now(), content: '' }; // Cada pestaña tiene su contenido
@@ -109,29 +111,39 @@ function App() {
     }
   };
 
-  const handleAnalyzeCode = async () => {
-    try {
-        const response = await fetch('http://localhost:5000/analyze-code', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ content: tabs[activeTabIndex].content }),
-        });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Error desconocido');
-        }
+// App.jsx
+const handleAnalyzeCode = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/analyze-code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: tabs[activeTabIndex].content }),
+    });
 
-        const data = await response.json();
-        console.log('Tokens: ', JSON.stringify(data.tokens, null, 2));
-        console.log('Árbol sintáctico (parseTree recibido):', JSON.stringify(data.parseTree, null, 2));
-
-    } catch (error) {
-        console.error('Error al analizar el código:', error.message);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error desconocido');
     }
+
+    const data = await response.json();
+    const parseTreeOutput = JSON.stringify(data.parseTree, null, 2);
+    const tokensOutput = JSON.stringify(data.tokens, null, 2);
+    
+    setTerminalOutput(`Árbol sintáctico:\n${parseTreeOutput}                    Tokens:\n${tokensOutput}`);
+    setShowTerminal(false); // Cerramos primero para forzar que abra de nuevo
+    setTimeout(() => setShowTerminal(true), 0); // Reabrimos la terminal
+  } catch (error) {
+    setTerminalOutput(`Error al analizar el código: ${error.message}`);
+    setShowTerminal(false);
+    setTimeout(() => setShowTerminal(true), 0);
+  }
 };
+
+
+
 
   const handleRunCode = () => {
     handleAnalyzeCode();
@@ -180,7 +192,11 @@ function App() {
         <div className="no-tab-message"></div>
       )}
       <Footer />
-
+      <Terminal 
+          output={terminalOutput} 
+          isOpen={showTerminal}
+          onClose={() => setShowTerminal(false)}
+        />
     </div>
     
   );

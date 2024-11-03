@@ -20,7 +20,7 @@
   
   .delete-icon {
     margin-left: 10px;
-    color: red;
+    color: rgb(85, 84, 84);
     cursor: pointer;
     visibility: hidden;
   }

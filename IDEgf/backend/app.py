@@ -92,19 +92,17 @@ def analyze_code():
     try:
         lexer = Lexer(code_content)
         tokens = lexer.tokenize()
-        
+        token_list = [{"type": token.type, "value": token.value} for token in tokens]
         parser = Parser(tokens)
         parse_tree = parser.parse()
         
         # Convierte el árbol a un diccionario
         tree_repr = parse_tree.to_dict()
-        file="tokens.txt"
-        with open(file, "w") as f:
-            f.write(str(tokens))
+
         # Imprime el árbol convertido en el backend para depuración
         print("Estructura del árbol:", tree_repr)
         
-        return jsonify({"parseTree": tree_repr}), 200
+        return jsonify({"parseTree": tree_repr, "tokens": token_list}), 200
     except Exception as e:
         print("Error:", str(e))
         return jsonify({"error": str(e)}), 500

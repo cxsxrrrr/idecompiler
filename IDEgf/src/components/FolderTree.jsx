@@ -60,18 +60,18 @@ function FolderTree({ onFileOpen }) {
   };
 
   return (
-    <div className="folder-tree p-5 bg-gray-700 rounded-lg mt-6">
+    <div className="folder-tree p-5 rounded-lg mt-6">
       <h3 className="text-white mb-4">Archivos</h3>
       <ul>
         {files.map((file, index) => (
           <li
             key={index}
-            className="relative flex justify-between items-center mb-0.5 p-2 bg-gray-800 text-white hover:bg-gray-600 rounded transition-transform transform hover:scale-105 cursor-pointer"
+            className="relative flex justify-between items-center mb-0.5 p-2 bg-customGray text-white hover:bg-gray-600 rounded transition-transform transform hover:scale-105 cursor-pointer"
             onClick={() => handleFileClick(file)}
           >
             {file}
             <button
-              className="text-red-400 hover:text-red-600 focus:outline-none"
+              className="text-gray-400 hover:text-red-600 focus:outline-none"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDeleteClick(file);

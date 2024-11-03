@@ -1,6 +1,6 @@
 import re
 
-KEYWORDS = {"false", "true", "Null", "and", "funct", "if", "elif", "else", "not", "or", "in", "return", "while", "for"}
+KEYWORDS = {"false", "true", "null", "and", "funct", "if", "elif", "else", "not", "or", "in", "return", "while", "for"}
 SYMBOLS = {"{": "LBRACE", "}": "RBRACE", "=": "ASSIGN", "==": "EQUALS"}
 
 class Token:
@@ -10,6 +10,9 @@ class Token:
 
     def __repr__(self):
         return f"Token({self.type}, '{self.value}')"
+    
+    def to_dict(self):
+        return {"type": self.type, "value": self.value}
 
 class Lexer:
     def __init__(self, text):
@@ -32,7 +35,7 @@ class Lexer:
             elif current_char in SYMBOLS:
                 tokens.append(Token(SYMBOLS[current_char], current_char))
                 self.position += 1
-            elif current_char.isdigit():
+            elif current_char.isdigit() or (current_char == '-' and self.position + 1 < len(self.text) and self.text[self.position + 1].isdigit()):
                 token = self._process_number()
                 tokens.append(token)
             elif current_char == '"' or current_char == "'":
@@ -61,6 +64,8 @@ class Lexer:
 
     def _process_number(self):
         start = self.position
+        if self.text[self.position] == '-':  # Manejar números negativos
+            self.position += 1
         while self.position < len(self.text) and (self.text[self.position].isdigit() or self.text[self.position] == '.'):
             self.position += 1
         number = self.text[start:self.position]
