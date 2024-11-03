@@ -6,18 +6,16 @@ import IA from '../assets/icons/IA.png';
 import run from '../assets/icons/run.png';
 import Save from '../assets/icons/Save.png';
 
-function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }) {
+function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent, onRunCode }) {
   const [showCarpetasDropdown, setShowCarpetasDropdown] = useState(false);
   const [showGuardadoDropdown, setShowGuardadoDropdown] = useState(false);
-  const [showModal, setShowModal] = useState(false); // Modal para crear archivo
-  const [fileName, setFileName] = useState(''); // Nombre del archivo a crear
-  const [showChat, setShowChat] = useState(false); // Estado para controlar la visibilidad de ChatAi
-  const [notification, setNotification] = useState({ show: false, message: '', type: '' }); // Notificaciones
-  const fileInputRef = useRef(null); // Ref para el input de abrir archivo
+  const [showModal, setShowModal] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+  const fileInputRef = useRef(null);
   const carpetasRef = useRef(null);
   const guardadoRef = useRef(null);
 
-  // Función para cerrar dropdown al hacer click fuera
   useEffect(() => {
     function handleClickOutside(event) {
       if (carpetasRef.current && !carpetasRef.current.contains(event.target)) {
@@ -34,34 +32,20 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
     };
   }, [carpetasRef, guardadoRef]);
 
-  const handleOpenChat = () => {
-
-    setShowChat(true); // Esto debería venir de las props del componente App
-  };
-
-  // Definición de la función `handleCloseChat`
-  const handleCloseChat = () => {
-    setShowChat(false);
-  };
-
-  // Función para manejar el clic en "Crear Archivo"
   const handleCreateFile = () => {
-    setFileName(''); // Restablece el nombre del archivo
-    setShowModal(true); // Muestra el modal
+    setFileName('');
+    setShowModal(true);
   };
 
-  // Función para manejar el clic en "Abrir Archivo"
   const handleOpenFile = () => {
-    fileInputRef.current.click(); // Simula el clic en el input oculto
+    fileInputRef.current.click();
   };
 
-  // Función para cerrar el modal
   const handleCloseModal = () => {
-    setFileName(''); // Restablece el nombre del archivo
-    setShowModal(false); // Cierra el modal
+    setFileName('');
+    setShowModal(false);
   };
 
-  // Función para manejar la creación del archivo
   const createFileOnBackend = (fileName) => {
     fetch('http://localhost:5000/create-file', {
       method: 'POST',
@@ -76,8 +60,8 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
         showNotification(data.error, 'error');
       } else {
         showNotification(data.message, 'success');
-        onFileCreate(fileName); // Llama a la función para actualizar el estado en App
-        handleCloseModal(); // Cierra el modal
+        onFileCreate(fileName);
+        handleCloseModal();
       }
     })
     .catch((error) => {
@@ -86,35 +70,31 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
     });
   };
 
-  // Función para manejar la apertura del archivo
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        const content = event.target.result; // Obtener contenido del archivo
-        onFileOpen({ name: file.name, content }); // Llama a la función para abrir el archivo
+        const content = event.target.result;
+        onFileOpen({ name: file.name, content });
       };
-      reader.readAsText(file); // Lee el archivo como texto
+      reader.readAsText(file);
     }
   };
 
-  // Función para mostrar notificaciones
   const showNotification = (message, type) => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
       setNotification({ show: false, message: '', type: '' });
-    }, 3000); // Ocultar la notificación después de 3 segundos
+    }, 3000);
   };
 
-  // Función para manejar el clic en "Guardar"
   const handleSaveFile = () => {
-    onFileSave(); // Llama a la función pasada desde el componente padre (App.js)
+    onFileSave();
   };
 
-  // Función para manejar el clic en "Guardar como"
   const handleSaveAs = async () => {
-    const currentContent = getCurrentFileContent(); // Obtiene el contenido actual
+    const currentContent = getCurrentFileContent();
     const fileHandle = await window.showSaveFilePicker({
       suggestedName: 'nombre_del_archivo.txt',
       types: [{
@@ -143,7 +123,6 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
         </div>
 
         <div className="sidebar-buttons">
-          {/* Botón Carpetas */}
           <div ref={carpetasRef} className="relative sidebar-button">
             <img
               src={files}
@@ -170,7 +149,6 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
             )}
           </div>
 
-          {/* Input oculto para abrir archivos */}
           <input
             type="file"
             ref={fileInputRef}
@@ -178,7 +156,6 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
             onChange={handleFileChange}
           />
 
-          {/* Botón Guardado */}
           <div ref={guardadoRef} className="relative sidebar-button">
             <img
               src={Save}
@@ -199,13 +176,8 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
             )}
           </div>
 
-          {/*! Botón IA */}
-          <div className="sidebar-button" onClick={() => window.open('https://gemini.google.com/app', '_blank')}>
-  <img src={IA} alt="IA" />
-</div>
-
           {/* Botón Ejecutar */}
-          <div className="sidebar-button">
+          <div className="sidebar-button" onClick={onRunCode}>
             <img src={run} alt="Ejecutar" />
           </div>
         </div>
@@ -214,7 +186,6 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
         </div>
       </aside>
 
-      {/* Modal para crear archivo */}
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
           <div className="bg-[#222222] p-8 rounded-lg shadow-lg w-96">
@@ -229,13 +200,13 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
             <div className="flex justify-end space-x-4">
               <button
                 className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded"
-                onClick={handleCloseModal} // Cierra el modal y restablece el input
+                onClick={handleCloseModal}
               >
                 Cancelar
               </button>
               <button
                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                onClick={() => createFileOnBackend(fileName)} // Crea el archivo en el backend
+                onClick={() => createFileOnBackend(fileName)}
               >
                 Crear
               </button>
@@ -244,7 +215,6 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent }
         </div>
       )}
 
-      {/* Notificación */}
       {notification.show && (
         <div className={`fixed bottom-5 right-5 p-4 bg-${notification.type === 'success' ? 'green-500' : 'red-500'} rounded`}>
           <p className="text-white">{notification.message}</p>

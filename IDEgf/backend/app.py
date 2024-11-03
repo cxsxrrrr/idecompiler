@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify, send_from_directory
 import os
 from flask_cors import CORS
+from semantic_tree import SemanticNode
+from lexer import Lexer
+from parser import Parser
 
 app = Flask(__name__)
 CORS(app)
@@ -76,6 +79,37 @@ def delete_file(filename):
         return jsonify({"error": "Archivo no encontrado."}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/analyze-code', methods=['POST'])
+def analyze_code():
+    data = request.get_json()
+    code_content = data.get('content')
+
+    if not code_content:
+        return jsonify({"error": "No se recibió contenido de código."}), 400
+
+    try:
+        lexer = Lexer(code_content)
+        tokens = lexer.tokenize()
+        
+        parser = Parser(tokens)
+        parse_tree = parser.parse()
+        
+        # Convierte el árbol a un diccionario
+        tree_repr = parse_tree.to_dict()
+        file="tokens.txt"
+        with open(file, "w") as f:
+            f.write(str(tokens))
+        # Imprime el árbol convertido en el backend para depuración
+        print("Estructura del árbol:", tree_repr)
+        
+        return jsonify({"parseTree": tree_repr}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
 
 
 

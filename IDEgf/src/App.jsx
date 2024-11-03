@@ -9,6 +9,7 @@ import './App.css';
 function App() {
   const [tabs, setTabs] = useState([]); // Inicializa sin pestañas
   const [activeTabIndex, setActiveTabIndex] = useState(null); // Índice de la pestaña activa
+  const [syntaxTree, setSyntaxTree] = useState(null);
 
   // Función para agregar una nueva pestaña
   const handleNewTab = () => {
@@ -107,6 +108,35 @@ function App() {
       // Enviar el contenido del archivo al backend para sobrescribirlo
     }
   };
+
+  const handleAnalyzeCode = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/analyze-code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: tabs[activeTabIndex].content }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error desconocido');
+        }
+
+        const data = await response.json();
+        console.log('Tokens: ', JSON.stringify(data.tokens, null, 2));
+        console.log('Árbol sintáctico (parseTree recibido):', JSON.stringify(data.parseTree, null, 2));
+
+    } catch (error) {
+        console.error('Error al analizar el código:', error.message);
+    }
+};
+
+  const handleRunCode = () => {
+    handleAnalyzeCode();
+  };
+
   
 
   // Nueva función para obtener el contenido del archivo actual
@@ -116,6 +146,7 @@ function App() {
 
   return (
     <div className="app-container">
+
       <Navbar
         tabs={tabs}
         activeTabIndex={activeTabIndex}
@@ -128,6 +159,7 @@ function App() {
         onFileOpen={handleFileOpen} 
         onFileSave={handleFileSave} 
         onFileSaveAs={handleFileSaveAs}
+        onRunCode={handleRunCode}
         getCurrentFileContent={getCurrentFileContent} // Pasa la función aquí
       />
       {activeTabIndex !== null && tabs[activeTabIndex] ? (
@@ -148,7 +180,9 @@ function App() {
         <div className="no-tab-message"></div>
       )}
       <Footer />
+
     </div>
+    
   );
 }
 
