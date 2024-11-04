@@ -8,7 +8,7 @@ export default function Terminal({ output, isOpen, onClose }) {
 
   useEffect(() => {
     if (isOpen) {
-      setHistory((prevHistory) => [...prevHistory, output]);
+      setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
     }
   }, [output, isOpen]);
 
@@ -24,40 +24,40 @@ export default function Terminal({ output, isOpen, onClose }) {
     }
   }, [history]);
 
+  const formatOutput = (text) => {
+    return text
+      .replace(/1. Árbol sintáctico:/g, '<span class="text-red-500">Árbol Sintáctico</span>')
+      .replace(/2. Tokens:/g, '<span class="text-red-500">Tokens</span>');
+  };
 
-
-  
-  // Agrega la función handleCommand para procesar los comandos ingresados por el usuario
   const handleCommand = (e) => {
     if (e.key === 'Enter') {
       const command = input.trim();
       if (command) {
         setHistory((prevHistory) => [...prevHistory, `guest@localhost:~$ ${command}`]);
         if (command === 'clear') {
-            setHistory([]);
-            setInput('');
-            return;
-          } else if (command === 'help') {
-            output = 'Available commands: help, clear, echo, date';
-            setHistory((prevHistory) => [...prevHistory, output]);
-            setInput('');
-            return;
-          } else if (command === 'date') {
-            output = new Date().toString();
-            setHistory((prevHistory) => [...prevHistory, output]);
-            setInput('');
-            return;
-          } else if (command.startsWith('echo ')) {
-            output = command.slice(5);
-            setHistory((prevHistory) => [...prevHistory, output]);
-            setInput('');
-            return;
-          }
+          setHistory([]);
+          setInput('');
+          return;
+        } else if (command === 'help') {
+          output = 'Available commands: help, clear, echo, date';
+          setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
+          setInput('');
+          return;
+        } else if (command === 'date') {
+          output = new Date().toString();
+          setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
+          setInput('');
+          return;
+        } else if (command.startsWith('echo ')) {
+          output = command.slice(5);
+          setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
+          setInput('');
+          return;
+        }
       }
       setInput(''); // Limpia el input después de enviar el comando
     }
-
-
   };
 
   if (!isOpen) return null;
@@ -78,12 +78,12 @@ export default function Terminal({ output, isOpen, onClose }) {
           ✕
         </button>
       </div>
-      <div 
+      <div
         ref={terminalRef}
         className="p-4 h-[calc(100%-40px)] overflow-y-auto"
       >
         {history.map((entry, index) => (
-          <div key={index} className="mb-1 text-[#50fa7b]">{entry}</div>
+          <div key={index} className="mb-1 text-[#50fa7b]" dangerouslySetInnerHTML={{ __html: entry }} />
         ))}
         <div className="flex">
           <span className="text-[#f8f8f2]">guest@localhost:~$ </span>
@@ -92,7 +92,7 @@ export default function Terminal({ output, isOpen, onClose }) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleCommand}  // Asocia el evento a la función handleCommand
+            onKeyDown={handleCommand}
             className="flex-1 ml-2 bg-transparent outline-none text-[#f8f8f2]"
           />
         </div>

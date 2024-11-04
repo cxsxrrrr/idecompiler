@@ -1,7 +1,14 @@
 import re
 
 KEYWORDS = {"false", "true", "null", "and", "funct", "if", "elif", "else", "not", "or", "in", "return", "while", "for"}
-SYMBOLS = {"{": "LBRACE", "}": "RBRACE", "=": "ASSIGN", "==": "EQUALS",    "+": "PLUS", "-": "MINUS", "*": "MULTIPLY", "/": "DIVIDE", "**": "POWER"}
+SYMBOLS = {"{": "LBRACE", "}": "RBRACE",
+            "=": "ASSIGN", "==": "EQUALS", 
+            "+": "PLUS", "-": "MINUS", "*":
+            "MULTIPLY", "/": "DIVIDE",
+            "**": "POWER",  "<": "LESS",
+            "<=": "LESSEQUAL", ">": "GREATER",
+            ">=": "GREATEREQUAL", "!=": "NOTEQUAL"
+}
 
 class Token:
     def __init__(self, type, value):
@@ -35,6 +42,16 @@ class Lexer:
             elif current_char in "+-*/":
                 token = self._process_operator()
                 tokens.append(token)
+
+            elif current_char in "<>":
+                token = self._process_comparison_operator()
+                tokens.append(token)
+            elif current_char == "!":
+                # Manejo del operador de desigualdad (!=)
+                if self.position + 1 < len(self.text) and self.text[self.position + 1] == "=":
+                    self.position += 2  # Consume '!='
+                    tokens.append(Token("NOTEQUAL", "!="))
+
             elif current_char in SYMBOLS:
                 tokens.append(Token(SYMBOLS[current_char], current_char))
                 self.position += 1
@@ -99,3 +116,13 @@ class Lexer:
                 return Token("MULTIPLY", "*")
             elif op == '/':
                 return Token("DIVIDE", "/")
+
+    def _process_comparison_operator(self):
+        # Detecta operadores de dos caracteres, como `<=`, `>=`, `!=`
+        if self.text[self.position:self.position + 2] in SYMBOLS:
+            op = self.text[self.position:self.position + 2]
+            self.position += 2
+        else:
+            op = self.text[self.position]
+            self.position += 1
+        return Token(SYMBOLS[op], op)

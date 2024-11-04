@@ -55,16 +55,25 @@ class Parser:
         return if_node
 
     def _parse_condition(self):
-        left = self._get_current_token().value
-        self.position += 1  # Consume variable o valor
-        operator = self._get_current_token()
-        if operator.type == "EQUALS":
-            self.position += 1
-            right = self._get_current_token().value
-            self.position += 1
-            return SemanticNode("Condition", f"{left} == {right}")
+        left = SemanticNode("Operand", self._get_current_token().value)
+        self.position += 1  # Consume el operando izquierdo
+
+        operator_token = self._get_current_token()
+        if operator_token and operator_token.type in {"EQUALS", "LESS", "LESSEQUAL", "GREATER", "GREATEREQUAL", "NOTEQUAL"}:
+            operator_node = SemanticNode("Operator", operator_token.value)
+            self.position += 1  # Consume el operador de comparación
+
+            right = SemanticNode("Operand", self._get_current_token().value)
+            self.position += 1  # Consume el operando derecho
+
+            # Crear nodo de condición y agregar los nodos hijos
+            condition_node = SemanticNode("Condition")
+            condition_node.add_child(left)
+            condition_node.add_child(operator_node)
+            condition_node.add_child(right)
+            return condition_node
         else:
-            raise ValueError("Operador de comparación esperado (==)")
+            raise ValueError("Operador de comparación esperado (==, <, <=, >, >=, !=)")
 
     def _is_assignment(self):
         if (self._get_current_token().type == "IDENTIFIER" and
