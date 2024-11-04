@@ -6,7 +6,7 @@
   z-index: 9999;
   top: 0;
   left: 0;
-  background-color: rgb(52, 48, 59);
+  background-color: rgb(57, 50, 71);
   overflow-x: hidden;
   padding-top: 20px;
   user-select: none;
@@ -136,7 +136,7 @@
 
   transform: translate(-50%, 57%);
 
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgb(50, 48, 59);
   color: white;
   padding: 4px 8px;
   border-radius: 4px;

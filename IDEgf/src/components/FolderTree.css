@@ -1,7 +1,7 @@
 .folder-tree {
     margin: 20px 0;
     border-radius: 30px;
-    background-color: rgb(85, 86, 94);
+    background-color: rgb(73, 56, 93);
     padding: 20px;
   }
   
@@ -35,7 +35,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(59, 53, 70);
     display: flex;
     justify-content: center;
     align-items: center;

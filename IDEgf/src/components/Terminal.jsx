@@ -26,9 +26,15 @@ export default function Terminal({ output, isOpen, onClose }) {
 
   const formatOutput = (text) => {
     return text
-      .replace(/1. Árbol sintáctico:/g, '<span class="text-red-500">Árbol Sintáctico</span>')
-      .replace(/2. Tokens:/g, '<span class="text-red-500">Tokens</span>');
+      .replace(/1. Árbol sintáctico:/g, '<span class="text-red-500">1. Árbol sintáctico</span>')
+      .replace(/2. Tokens:/g, '<span class="text-red-500">2. Tokens</span>')
+      .replace(/3. Caracteres no numéricos totales:/g, '<span class="text-red-500">3. Caracteres no numéricos totales</span>')
+      .replace(/(valores)/g, '<span class="text-purple-500">valores</span>')
+      .replace(/(cantidad)/g, '<span class="text-purple-500">valores</span>')
+      .replace(/4. Números/g, '<span class="text-red-500">5. Números</span>')
+      .replace(/5. Espacios en blanco/g, '<span class="text-red-500">6. Espacios en blanco</span>');
   };
+  
 
   const handleCommand = (e) => {
     if (e.key === 'Enter') {
