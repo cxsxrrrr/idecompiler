@@ -25,6 +25,8 @@ class Parser:
             return self._parse_if_statement()
         elif self._is_assignment():
             return self._parse_assignment()
+        elif self._is_expression():
+            return self._parse_expression()
         return None
 
     def _parse_if_statement(self):
@@ -60,8 +62,7 @@ class Parser:
             self.position += 1
             right = self._get_current_token().value
             self.position += 1
-            # Devuelve una cadena en lugar de un nodo
-            return f"{left} == {right}"
+            return SemanticNode("Condition", f"{left} == {right}")
         else:
             raise ValueError("Operador de comparación esperado (==)")
 
@@ -75,9 +76,74 @@ class Parser:
         variable = self._get_current_token().value
         self.position += 1  # Consume el nombre de la variable
         self.position += 1  # Consume '='
-        value = self._get_current_token().value
-        self.position += 1  # Consume el valor
-        return SemanticNode("Assignment", f"{variable} = {value}")
+        expression_node = self._parse_expression()  # Obtén el nodo de expresión completo
+        assignment_node = SemanticNode("Assignment")  # Nodo sin valor directo
+        assignment_node.add_child(SemanticNode("Identifier", variable))  # Nombre de variable como hijo
+        assignment_node.add_child(expression_node)  # Expresión como hijo
+        return assignment_node
+
+    def _is_expression(self):
+        return self._get_current_token().type in {"NUMBER", "IDENTIFIER", "PLUS", "MINUS", "MULTIPLY", "DIVIDE", "POWER"}
+
+    def _parse_expression(self):
+        node = self._parse_term()
+        while self._get_current_token() and self._get_current_token().type in {"PLUS", "MINUS"}:
+            operator = self._get_current_token()
+            self.position += 1  # Consume operador
+            right = self._parse_term()
+            expr_node = SemanticNode(operator.type, operator.value)
+            expr_node.add_child(node)
+            expr_node.add_child(right)
+            node = expr_node
+        return node
+
+    def _parse_term(self):
+        node = self._parse_factor()
+        while self._get_current_token() and self._get_current_token().type in {"MULTIPLY", "DIVIDE"}:
+            operator = self._get_current_token()
+            self.position += 1  # Consume operador
+            right = self._parse_factor()
+
+            # Verificación de división por cero en el parser
+            if operator.type == "DIVIDE" and right.type == "NUMBER" and float(right.value) == 0:
+                raise ZeroDivisionError("Error: división por cero en el parser.")
+
+            term_node = SemanticNode(operator.type, operator.value)
+            term_node.add_child(node)
+            term_node.add_child(right)
+            node = term_node
+        return node
+
+    def _parse_factor(self):
+        node = self._parse_primary()
+        while self._get_current_token() and self._get_current_token().type == "POWER":
+            operator = self._get_current_token()
+            self.position += 1  # Consume operador de potencia
+            right = self._parse_primary()
+            power_node = SemanticNode(operator.type, operator.value)
+            power_node.add_child(node)
+            power_node.add_child(right)
+            node = power_node
+        return node
+
+    def _parse_primary(self):
+        token = self._get_current_token()
+        if token.type == "NUMBER":
+            self.position += 1
+            return SemanticNode("NUMBER", token.value)
+        elif token.type == "IDENTIFIER":
+            self.position += 1
+            return SemanticNode("IDENTIFIER", token.value)
+        elif token.type == "LPAREN":
+            self.position += 1  # Consume '('
+            node = self._parse_expression()
+            if self._get_current_token().type != "RPAREN":
+                raise ValueError("Se esperaba un parentesis de cierre ')'")
+            self.position += 1  # Consume ')'
+            return node
+        else:
+            raise ValueError(f"Unexpected token: {token}")
+        
 
     def _get_current_token(self):
         if self.position < len(self.tokens):

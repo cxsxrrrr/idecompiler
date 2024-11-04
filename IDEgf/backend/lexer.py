@@ -1,7 +1,7 @@
 import re
 
 KEYWORDS = {"false", "true", "null", "and", "funct", "if", "elif", "else", "not", "or", "in", "return", "while", "for"}
-SYMBOLS = {"{": "LBRACE", "}": "RBRACE", "=": "ASSIGN", "==": "EQUALS"}
+SYMBOLS = {"{": "LBRACE", "}": "RBRACE", "=": "ASSIGN", "==": "EQUALS",    "+": "PLUS", "-": "MINUS", "*": "MULTIPLY", "/": "DIVIDE", "**": "POWER"}
 
 class Token:
     def __init__(self, type, value):
@@ -31,6 +31,9 @@ class Lexer:
                 tokens.append(token)
             elif current_char == "=":
                 token = self._process_equals()
+                tokens.append(token)
+            elif current_char in "+-*/":
+                token = self._process_operator()
                 tokens.append(token)
             elif current_char in SYMBOLS:
                 tokens.append(Token(SYMBOLS[current_char], current_char))
@@ -80,3 +83,19 @@ class Lexer:
         string_value = self.text[start:self.position]
         self.position += 1  # Consume la comilla final
         return Token("STRING", string_value)
+
+    def _process_operator(self):
+        if self.text[self.position:self.position + 2] == "**":
+            self.position += 2
+            return Token("POWER", "**")
+        else:
+            op = self.text[self.position]
+            self.position += 1
+            if op == '+':
+                return Token("PLUS", "+")
+            elif op == '-':
+                return Token("MINUS", "-")
+            elif op == '*':
+                return Token("MULTIPLY", "*")
+            elif op == '/':
+                return Token("DIVIDE", "/")
