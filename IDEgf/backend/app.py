@@ -80,7 +80,6 @@ def delete_file(filename):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @app.route('/analyze-code', methods=['POST'])
 def analyze_code():
     data = request.get_json()
@@ -96,13 +95,22 @@ def analyze_code():
         parser = Parser(tokens)
         parse_tree = parser.parse()
         
-        # Convierte el árbol a un diccionario
+        # Convertir el árbol a un diccionario
         tree_repr = parse_tree.to_dict()
 
-        # Imprime el árbol convertido en el backend para depuración
-        print("Estructura del árbol:", tree_repr)
-        
-        return jsonify({"parseTree": tree_repr, "tokens": token_list}), 200
+        characters = [char for char in code_content if not char.isdigit()]  # Filtrar solo caracteres no numéricos
+        total_characters = len(characters)
+        numbers = [token.value for token in tokens if token.type == "NUMBER"]
+        whitespace_count = sum(1 for char in code_content if char.isspace())
+
+        return jsonify({
+            "parseTree": tree_repr,
+            "tokens": token_list,
+            "totalCharacters": total_characters,
+            "characters": characters,
+            "numbers": numbers,
+            "whitespaceCount": whitespace_count,
+        }), 200
     except Exception as e:
         print("Error:", str(e))
         return jsonify({"error": str(e)}), 500
