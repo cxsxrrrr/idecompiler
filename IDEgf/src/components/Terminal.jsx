@@ -39,10 +39,19 @@ export default function Terminal({ output, isOpen, onClose }) {
             return;
           } else if (command === 'help') {
             output = 'Available commands: help, clear, echo, date';
+            setHistory((prevHistory) => [...prevHistory, output]);
+            setInput('');
+            return;
           } else if (command === 'date') {
             output = new Date().toString();
+            setHistory((prevHistory) => [...prevHistory, output]);
+            setInput('');
+            return;
           } else if (command.startsWith('echo ')) {
             output = command.slice(5);
+            setHistory((prevHistory) => [...prevHistory, output]);
+            setInput('');
+            return;
           }
       }
       setInput(''); // Limpia el input después de enviar el comando

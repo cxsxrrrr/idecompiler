@@ -132,7 +132,7 @@ const handleAnalyzeCode = async () => {
     const parseTreeOutput = JSON.stringify(data.parseTree, null, 2);
     const tokensOutput = JSON.stringify(data.tokens, null, 2);
     
-    setTerminalOutput(`Árbol sintáctico:\n${parseTreeOutput}                    Tokens:\n${tokensOutput}`);
+    setTerminalOutput(`1. Árbol sintáctico:\n${parseTreeOutput} >>>>>>>>> \n\n 2. Tokens:\n${tokensOutput}`);
     setShowTerminal(false); // Cerramos primero para forzar que abra de nuevo
     setTimeout(() => setShowTerminal(true), 0); // Reabrimos la terminal
   } catch (error) {
