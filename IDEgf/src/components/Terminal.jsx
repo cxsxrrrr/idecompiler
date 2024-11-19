@@ -1,26 +1,26 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';  // IMPORTA AQUÍ LOS HOOKS
 
-export default function Terminal({ output, isOpen, onClose }) {
-  const [input, setInput] = useState('');
-  const [history, setHistory] = useState([]);
-  const inputRef = useRef(null);
-  const terminalRef = useRef(null);
+export default function Terminal({ output, isOpen, onClose, tabs, activeTabIndex }) {
+  const [input, setInput] = useState(''); // Hook de estado para el input
+  const [history, setHistory] = useState([]); // Hook de estado para el historial de comandos
+  const inputRef = useRef(null); // Referencia al input para enfocarlo
+  const terminalRef = useRef(null); // Referencia al terminal para el scroll
 
   useEffect(() => {
     if (isOpen) {
-      setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
+      setHistory((prevHistory) => [...prevHistory, formatOutput(output)]); // Actualiza el historial si el terminal está abierto
     }
   }, [output, isOpen]);
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus(); // Enfoca el input cuando se renderiza
     }
   }, []);
 
   useEffect(() => {
     if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight; // Hacer scroll hacia abajo cuando se actualiza el historial
     }
   }, [history]);
 
@@ -30,39 +30,51 @@ export default function Terminal({ output, isOpen, onClose }) {
       .replace(/2. Tokens:/g, '<span class="text-red-500">2. Tokens</span>')
       .replace(/3. Caracteres no numéricos totales:/g, '<span class="text-red-500">3. Caracteres no numéricos totales</span>')
       .replace(/(valores)/g, '<span class="text-purple-500">valores</span>')
-      .replace(/(cantidad)/g, '<span class="text-purple-500">valores</span>')
-      .replace(/4. Números/g, '<span class="text-red-500">5. Números</span>')
-      .replace(/5. Espacios en blanco/g, '<span class="text-red-500">6. Espacios en blanco</span>');
+      .replace(/(cantidad)/g, '<span class="text-purple-500">cantidad</span>');
   };
-  
 
-  const handleCommand = (e) => {
+  const handleCommand = async (e) => {
     if (e.key === 'Enter') {
-      const command = input.trim();
-      if (command) {
-        setHistory((prevHistory) => [...prevHistory, `guest@localhost:~$ ${command}`]);
-        if (command === 'clear') {
-          setHistory([]);
-          setInput('');
-          return;
-        } else if (command === 'help') {
-          output = 'Available commands: help, clear, echo, date';
-          setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
-          setInput('');
-          return;
-        } else if (command === 'date') {
-          output = new Date().toString();
-          setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
-          setInput('');
-          return;
-        } else if (command.startsWith('echo ')) {
-          output = command.slice(5);
-          setHistory((prevHistory) => [...prevHistory, formatOutput(output)]);
-          setInput('');
-          return;
+      const command = input.trim(); // Obtiene el comando
+      setHistory((prevHistory) => [...prevHistory, `guest@localhost:~$ ${command}`]); // Agrega el comando al historial
+      if (command === 'clear') {
+        setHistory([]); // Limpia el historial
+      } else if (command === 'arbol') {
+        if (activeTabIndex !== null && tabs[activeTabIndex]) {
+          try {
+            const response = await fetch('http://localhost:5000/syntax-analysis', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ content: tabs[activeTabIndex].content }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || 'Error desconocido al obtener el árbol sintáctico');
+            }
+
+            const data = await response.json();
+            const treeOutput = JSON.stringify(data.parseTree, null, 2);
+            setHistory((prevHistory) => [...prevHistory, `<pre>${treeOutput}</pre>`]);
+          } catch (error) {
+            setHistory((prevHistory) => [
+              ...prevHistory,
+              `Error al obtener el árbol sintáctico: ${error.message}`,
+            ]);
+          }
+        } else {
+          setHistory((prevHistory) => [
+            ...prevHistory,
+            'Error: No hay una pestaña activa con contenido para analizar.',
+          ]);
         }
+      } else if (command === 'help') {
+        setHistory((prevHistory) => [
+          ...prevHistory,
+          'Comandos disponibles: help, clear, arbol',
+        ]);
       }
-      setInput(''); // Limpia el input después de enviar el comando
+      setInput(''); // Limpia el input después de ejecutar el comando
     }
   };
 
@@ -84,12 +96,13 @@ export default function Terminal({ output, isOpen, onClose }) {
           ✕
         </button>
       </div>
-      <div
-        ref={terminalRef}
-        className="p-4 h-[calc(100%-40px)] overflow-y-auto"
-      >
+      <div ref={terminalRef} className="p-4 h-[calc(100%-40px)] overflow-y-auto">
         {history.map((entry, index) => (
-          <div key={index} className="mb-1 text-[#50fa7b]" dangerouslySetInnerHTML={{ __html: entry }} />
+          <div
+            key={index}
+            className="mb-1 text-[#50fa7b]"
+            dangerouslySetInnerHTML={{ __html: entry }}
+          />
         ))}
         <div className="flex">
           <span className="text-[#f8f8f2]">guest@localhost:~$ </span>

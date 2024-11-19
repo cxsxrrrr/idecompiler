@@ -80,8 +80,8 @@ def delete_file(filename):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/analyze-code', methods=['POST'])
-def analyze_code():
+@app.route('/lexical-analysis', methods=['POST'])
+def lexical_analysis():
     data = request.get_json()
     code_content = data.get('content')
 
@@ -92,28 +92,60 @@ def analyze_code():
         lexer = Lexer(code_content)
         tokens = lexer.tokenize()
         token_list = [{"type": token.type, "value": token.value} for token in tokens]
-        parser = Parser(tokens)
-        parse_tree = parser.parse()
-        
-        # Convertir el árbol a un diccionario
-        tree_repr = parse_tree.to_dict()
 
-        characters = [char for char in code_content if not char.isdigit()]  # Filtrar solo caracteres no numéricos
+        # Filtrar caracteres no numéricos para contar caracteres totales
+        characters = [char for char in code_content if char.isalpha()]
         total_characters = len(characters)
+
+        # Calcular la frecuencia de cada letra
+        frequency = {}
+        for char in characters:
+            frequency[char] = frequency.get(char, 0) + 1
+
+        # Obtener lista de letras únicas
+        unique_letters = list(frequency.keys())
+
+        # Contar números y espacios en blanco
         numbers = [token.value for token in tokens if token.type == "NUMBER"]
         whitespace_count = sum(1 for char in code_content if char.isspace())
 
         return jsonify({
-            "parseTree": tree_repr,
             "tokens": token_list,
             "totalCharacters": total_characters,
-            "characters": characters,
+            "letterFrequency": frequency,
+            "uniqueLetters": unique_letters,
             "numbers": numbers,
             "whitespaceCount": whitespace_count,
         }), 200
     except Exception as e:
-        print("Error:", str(e))
+        print("Error en el análisis léxico:", str(e))
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/syntax-analysis', methods=['POST'])
+def syntax_analysis():
+    data = request.get_json()
+    code_content = data.get('content')
+
+    if not code_content:
+        return jsonify({"error": "No se recibió contenido de código."}), 400
+
+    try:
+        lexer = Lexer(code_content)
+        tokens = lexer.tokenize()
+        parser = Parser(tokens)
+        parse_tree = parser.parse()
+
+        # Convertir el árbol a un diccionario
+        tree_repr = parse_tree.to_dict()
+
+        return jsonify({
+            "parseTree": tree_repr,
+        }), 200
+    except Exception as e:
+        print("Error en el análisis sintáctico:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 
 

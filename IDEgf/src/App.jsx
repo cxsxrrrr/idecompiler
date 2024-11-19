@@ -5,6 +5,7 @@ import Sidebar from './components/sidebar';
 import Code from './components/code';
 import Footer from './components/footer';
 import Terminal from './components/terminal';
+
 import './App.css';
 
 function App() {
@@ -112,41 +113,48 @@ function App() {
   };
 
 
-// App.jsx
-const handleAnalyzeCode = async () => {
-  try {
-    const response = await fetch('http://localhost:5000/analyze-code', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: tabs[activeTabIndex].content }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Error desconocido');
+  const handleAnalyzeCode = async () => {
+    try {
+      // Realiza la solicitud al análisis léxico
+      const response = await fetch('http://localhost:5000/lexical-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: tabs[activeTabIndex].content }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error desconocido en el análisis léxico');
+      }
+  
+      const data = await response.json();
+  
+      // Formatea los resultados para mostrarlos en el terminal
+      const tokensOutput = JSON.stringify(data.tokens, null, 2);
+      const letterFrequencyOutput = Object.entries(data.letterFrequency)
+        .map(([letter, freq]) => `${letter}: ${freq}`)
+        .join(', ');
+  
+      setTerminalOutput(
+        `1. Tokens:\n${tokensOutput}\n\n` +
+        `2. Caracteres alfabéticos totales: ${data.totalCharacters}\n` +
+        `   (frecuencia): ${letterFrequencyOutput}\n` +
+        `   (únicos): ${data.uniqueLetters.join(', ')}\n\n` +
+        `3. Números (cantidad): ${data.numbers.length} (valores): ${data.numbers.join(', ')}\n\n` +
+        `4. Espacios en blanco (cantidad): ${data.whitespaceCount}`
+      );
+  
+      setShowTerminal(false);
+      setTimeout(() => setShowTerminal(true), 0);
+    } catch (error) {
+      setTerminalOutput(`Error al analizar el código: ${error.message}`);
+      setShowTerminal(false);
+      setTimeout(() => setShowTerminal(true), 0);
     }
-
-    const data = await response.json();
-    const parseTreeOutput = JSON.stringify(data.parseTree, null, 2);
-    const tokensOutput = JSON.stringify(data.tokens, null, 2);
-    
-    setTerminalOutput(`1. Árbol sintáctico:\n${parseTreeOutput}\n\n` +
-      `2. Tokens:\n${tokensOutput}\n\n` +
-      `3. Caracteres no numéricos totales: (cantidad) ${data.totalCharacters}\n` +
-      `   (valores) ${JSON.stringify(data.characters)}\n\n` +
-      `4. Números (cantidad): ${data.numbers.length} (valores) ${data.numbers.join(', ')}\n\n` +
-      `5. Espacios en blanco (cantidad): ${data.whitespaceCount}`);
-    setShowTerminal(false);
-    setTimeout(() => setShowTerminal(true), 0);
-  } catch (error) {
-    setTerminalOutput(`Error al analizar el código: ${error.message}`);
-    setShowTerminal(false);
-    setTimeout(() => setShowTerminal(true), 0);
-  }
-};
-
+  };
+  
 
 
 
@@ -197,11 +205,14 @@ const handleAnalyzeCode = async () => {
         <div className="no-tab-message"></div>
       )}
       <Footer />
-      <Terminal 
-          output={terminalOutput} 
-          isOpen={showTerminal}
-          onClose={() => setShowTerminal(false)}
-        />
+          <Terminal 
+      output={terminalOutput} 
+      isOpen={showTerminal} 
+      onClose={() => setShowTerminal(false)} 
+      tabs={tabs} // Pasa las pestañas como prop
+      activeTabIndex={activeTabIndex} // Pasa el índice activo como prop
+    />
+
     </div>
     
   );
