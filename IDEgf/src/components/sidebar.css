@@ -144,3 +144,47 @@
   z-index: 9999999;
   font-size: 12px;
 }
+
+.sidebar-button-2 {
+
+  margin-top: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.sidebar-button-2 img {
+  width: 20px; /* Ajusta el tamaño del ícono según tu preferencia */
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-button-2:hover img {
+  transform: scale(1.2); /* Efecto de zoom al pasar el cursor */
+}
+
+.sidebar-button-2[title] {
+  position: relative;
+  
+}
+
+.sidebar-button-2[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  bottom: -25px;
+  z-index: 9999999;
+  left: 50%;
+
+  transform: translate(-50%, 57%);
+
+  background-color: rgb(50, 48, 59);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 9999999;
+  font-size: 12px;
+}

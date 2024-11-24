@@ -6,7 +6,7 @@ import IA from '../assets/icons/IA.png';
 import run from '../assets/icons/run.png';
 import Save from '../assets/icons/Save.png';
 
-function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent, onRunCode }) {
+function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent, onRunCode, onRunSyntax}) {
   const [showCarpetasDropdown, setShowCarpetasDropdown] = useState(false);
   const [showGuardadoDropdown, setShowGuardadoDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -180,10 +180,18 @@ function Sidebar({ onFileCreate, onFileOpen, onFileSave, getCurrentFileContent, 
           <div className="sidebar-button" onClick={onRunCode}>
             <img src={run} alt="Ejecutar" />
           </div>
+          <div className="sidebar-button-2" onClick={onRunSyntax}>
+        <img src={run} alt="Ejecutar (Secundario)" />
+     </div>
+
         </div>
         <div className="folder-tree-container">
           <FolderTree onFileOpen={onFileOpen} />
         </div>
+
+
+
+        
       </aside>
 
       {showModal && (

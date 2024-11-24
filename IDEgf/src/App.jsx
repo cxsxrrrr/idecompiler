@@ -156,6 +156,47 @@ function App() {
   };
   
 
+  const handleSyntaxCode = async () => {
+    try {
+      if (activeTabIndex !== null && tabs[activeTabIndex]) {
+        // Realiza la solicitud para el análisis sintáctico
+        const response = await fetch('http://localhost:5000/syntax-analysis', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ content: tabs[activeTabIndex].content }),
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error desconocido en el análisis sintáctico');
+        }
+  
+        const data = await response.json();
+  
+        // Formatea los resultados para mostrarlos en el terminal
+        const treeOutput = JSON.stringify(data.parseTree, null, 2);
+  
+        setTerminalOutput(
+          `Árbol sintáctico:\n${treeOutput}`
+        );
+  
+        setShowTerminal(false);
+        setTimeout(() => setShowTerminal(true), 0);
+      } else {
+        setTerminalOutput('Error: No hay una pestaña activa con contenido para analizar.');
+        setShowTerminal(false);
+        setTimeout(() => setShowTerminal(true), 0);
+      }
+    } catch (error) {
+      setTerminalOutput(`Error al analizar la sintaxis: ${error.message}`);
+      setShowTerminal(false);
+      setTimeout(() => setShowTerminal(true), 0);
+    }
+  };
+  
+  
 
 
   const handleRunCode = () => {
@@ -185,6 +226,7 @@ function App() {
         onFileSave={handleFileSave} 
         onFileSaveAs={handleFileSaveAs}
         onRunCode={handleRunCode}
+        onRunSyntax={handleSyntaxCode}
         getCurrentFileContent={getCurrentFileContent} // Pasa la función aquí
       />
       {activeTabIndex !== null && tabs[activeTabIndex] ? (
