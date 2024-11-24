@@ -18,6 +18,60 @@ class Parser:
                 # Evita bucles infinitos avanzando si no se pudo analizar un statement
                 self.position += 1
         return ast_root
+    
+    def _parse_function(self):
+        self.position += 1  # Consume 'def'
+
+        # Verificar el nombre de la función
+        if self._get_current_token().type != "IDENTIFIER":
+            raise ValueError("Error: Se esperaba un nombre de función después de 'def'")
+
+        function_name = self._get_current_token().value
+        self.position += 1  # Consume el nombre de la función
+
+        # Verificar el paréntesis de apertura '('
+        if self._get_current_token().type != "LPAREN":
+            raise ValueError("Error: Se esperaba '(' después del nombre de la función")
+
+        self.position += 1  # Consume '('
+
+        # Parsear los parámetros
+        parameters = []
+        while self._get_current_token().type != "RPAREN":
+            if self._get_current_token().type == "IDENTIFIER":
+                parameters.append(SemanticNode("Parameter", self._get_current_token().value))
+                self.position += 1  # Consume el parámetro
+            elif self._get_current_token().type == "COMMA":
+                self.position += 1  # Consume ',' entre parámetros
+            else:
+                raise ValueError("Error: Parámetro no válido en la declaración de la función")
+        
+        self.position += 1  # Consume ')'
+
+        # Crear nodo de la función
+        function_node = SemanticNode("Function", function_name)
+        for param in parameters:
+            function_node.add_child(param)
+
+        # Verificar apertura del cuerpo con '{'
+        if self._get_current_token().type == "LBRACE":
+            self.position += 1  # Consume '{'
+            while self.position < len(self.tokens) and self._get_current_token().type != "RBRACE":
+                statement = self._parse_statement()
+                if statement:
+                    function_node.add_child(statement)
+                else:
+                    self.position += 1
+            if self._get_current_token().type == "RBRACE":
+                self.position += 1  # Consume '}'
+            else:
+                raise ValueError("Error: falta '}' para cerrar la función")
+        else:
+            raise ValueError("Error: falta '{' para abrir el cuerpo de la función")
+        
+        return function_node
+
+
 
     def _parse_statement(self):
         current_token = self._get_current_token()

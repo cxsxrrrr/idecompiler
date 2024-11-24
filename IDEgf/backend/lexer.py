@@ -7,7 +7,8 @@ SYMBOLS = {"{": "LBRACE", "}": "RBRACE",
             "MULTIPLY", "/": "DIVIDE",
             "**": "POWER",  "<": "LESS",
             "<=": "LESSEQUAL", ">": "GREATER",
-            ">=": "GREATEREQUAL", "!=": "NOTEQUAL"
+            ">=": "GREATEREQUAL", "!=": "NOTEQUAL",     "(": "LPAREN", 
+    ")": "RPAREN"
 }
 
 class Token:
